@@ -1,0 +1,249 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "scopeName": "source.blueprint",
+  "name": "Blueprint",
+  "patterns": [
+    { "include": "#comment" },
+    { "include": "#using-statement" },
+    { "include": "#translation-function" },
+    { "include": "#function" },
+    { "include": "#property-declaration" },
+    { "include": "#property-block" },
+    { "include": "#binding" },
+    { "include": "#signal" },
+    { "include": "#class-with-id" },
+    { "include": "#menu-with-id" },
+    { "include": "#superclass-name" },
+    { "include": "#qualifier" },
+    { "include": "#string" },
+    { "include": "#numeric-value" },
+    { "include": "#class-name" },
+    { "include": "#keyword" },
+    { "include": "#property-value" },
+    { "include": "#blocks" },
+    { "include": "#terminator" }
+  ],
+  "repository": {
+    "comment": {
+      "patterns": [
+        { "include": "#line-comment" },
+        { "include": "#block-comment" }
+      ]
+    },
+    "line-comment": {
+      "name": "comment.line.double-slash.blueprint",
+      "match": "//.*$"
+    },
+    "block-comment": {
+      "name": "comment.block.blueprint",
+      "begin": "/\\*",
+      "end": "\\*/",
+      "captures": {
+        "0": { "name": "punctuation.definition.comment.blueprint" }
+      }
+    },
+    "literals": {
+      "patterns": [
+        { "include": "#numeric-value" },
+        { "include": "#string" },
+        { "include": "#property-value" }
+      ]
+    },
+    "numeric-value": {
+      "name": "constant.numeric.blueprint",
+      "match": "-?\\d+(\\.\\d+)?"
+    },
+    "property-value": {
+      "name": "constant.language.blueprint",
+      "match": "\\b[-\\d_a-z][-\\w]*\\b"
+    },
+    "string": {
+      "patterns": [
+        { "include": "#string-single" },
+        { "include": "#string-double" }
+      ]
+    },
+    "string-single": {
+      "name": "string.quoted.single.blueprint",
+      "begin": "'",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.string.begin.blueprint" }
+      },
+      "end": "'",
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.string.end.blueprint" }
+      },
+      "patterns": [
+        { "name": "constant.character.escape.blueprint", "match": "\\\\." }
+      ]
+    },
+    "string-double": {
+      "name": "string.quoted.double.blueprint",
+      "begin": "\"",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.string.begin.blueprint" }
+      },
+      "end": "\"",
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.string.end.blueprint" }
+      },
+      "patterns": [
+        { "name": "constant.character.escape.blueprint", "match": "\\\\." }
+      ]
+    },
+    "translation-function": {
+      "name": "meta.function.translation.blueprint",
+      "match": "\\b(_)\\s*(?=\\()",
+      "captures": {
+        "1": { "name": "entity.name.function.translation.blueprint" }
+      }
+    },
+    "function": {
+      "name": "meta.function.blueprint",
+      "begin": "\\b([a-zA-Z_]\\w*)\\s*(\\()",
+      "beginCaptures": {
+        "1": { "name": "entity.name.function.blueprint" },
+        "2": { "name": "punctuation.section.function.begin.blueprint" }
+      },
+      "end": "\\)",
+      "endCaptures": {
+        "0": { "name": "punctuation.section.function.end.blueprint" }
+      },
+      "patterns": [
+        { "include": "#function" },
+        { "include": "#string" },
+        { "include": "#numeric-value" },
+        {
+          "name": "entity.other.attribute-name.id.blueprint",
+          "match": "\\b[-\\d_a-z][-\\w]*\\b"
+        },
+        {
+          "name": "punctuation.separator.comma.blueprint",
+          "match": ","
+        }
+      ]
+    },
+    "keyword": {
+      "patterns": [
+        { "include": "#keyword-control" },
+        { "include": "#keyword-operator" }
+      ]
+    },
+    "keyword-control": {
+      "name": "keyword.control.blueprint",
+      "match": "\\b(using|template|menu|submenu|section|item|bind|bind-property|typeof|as|accessibility)\\b"
+    },
+    "keyword-operator": {
+      "name": "keyword.operator.blueprint",
+      "match": "(=>)"
+    },
+    "class-name": {
+      "name": "entity.name.class.blueprint",
+      "match": "\\b\\.?[A-Z][\\w\\.]*"
+    },
+    "superclass-name": {
+      "name": "meta.inherited-class.blueprint",
+      "match": "(:)\\s*(\\.?[A-Z][\\w\\.]*)",
+      "captures": {
+        "1": {
+          "name": "keyword.control.operator.inherited-class.blueprint"
+        },
+        "2": { "name": "entity.other.inherited-class.blueprint" }
+      }
+    },
+    "class-with-id": {
+      "name": "meta.class.identified.blueprint",
+      "match": "\\b(\\.?[A-Z][\\w\\.]*)\\s+([-\\da-z][-\\w]*)",
+      "captures": {
+        "1": { "name": "entity.name.class.blueprint" },
+        "2": { "name": "entity.other.attribute-name.id.blueprint" }
+      }
+    },
+    "menu-with-id": {
+      "name": "meta.menu.identified.blueprint",
+      "match": "\\b(menu|submenu|section|item)\\s+([-\\da-z][-\\w]*)\\s*(?=\\{)",
+      "captures": {
+        "1": { "name": "keyword.control.menu.blueprint" },
+        "2": { "name": "entity.other.attribute-name.id.blueprint" }
+      }
+    },
+    "property-declaration": {
+      "name": "meta.property-declaration.blueprint",
+      "match": "\\b([-\\da-z]+)\\s*(:|=)",
+      "captures": {
+        "1": { "name": "support.type.property-name.blueprint" },
+        "2": { "name": "punctuation.separator.key-value.blueprint" }
+      }
+    },
+    "property-block": {
+      "name": "meta.property-block.blueprint",
+      "match": "\\b([-\\da-z]+)\\s*(?=\\[|\\{)",
+      "captures": {
+        "1": { "name": "support.type.property-name.blueprint" }
+      }
+    },
+    "blocks": {
+      "patterns": [
+        { "include": "#property-block-begin" },
+        { "include": "#property-block-end" }
+      ]
+    },
+    "property-block-begin": {
+      "name": "punctuation.section.property-list.begin.blueprint",
+      "match": "\\[|\\{"
+    },
+    "property-block-end": {
+      "name": "punctuation.section.property-list.end.blueprint",
+      "match": "\\]|\\}"
+    },
+    "terminator": {
+      "name": "punctuation.terminator.expression.blueprint",
+      "match": ";"
+    },
+    "signal": {
+      "name": "meta.signal.blueprint",
+      "match": "\\b([-\\da-z]+)\\s*(=>)",
+      "captures": {
+        "1": { "name": "support.type.property-name.blueprint" },
+        "2": { "name": "keyword.operator.assignment.signal.blueprint" }
+      }
+    },
+    "binding": {
+      "name": "meta.binding.blueprint",
+      "match": "\\b(bind)\\s+([-\\w]+)\\s*(\\.)\\s*([-\\w]+)",
+      "captures": {
+        "1": { "name": "keyword.control.bind.blueprint" },
+        "2": { "name": "entity.other.attribute-name.id.blueprint" },
+        "3": { "name": "punctuation.accessor.blueprint" },
+        "4": { "name": "variable.other.property.blueprint" }
+      }
+    },
+    "qualifier": {
+      "name": "meta.qualifier.blueprint",
+      "begin": "(\\[)\\s*([-\\w]+)\\b",
+      "beginCaptures": {
+        "1": { "name": "punctuation.section.qualifier.begin.blueprint" },
+        "2": { "name": "support.type.property-name.blueprint" }
+      },
+      "end": "\\]",
+      "endCaptures": {
+        "0": { "name": "punctuation.section.qualifier.end.blueprint" }
+      },
+      "patterns": [
+        { "include": "#comment" },
+        { "include": "#property-declaration" },
+        { "include": "#literals" }
+      ]
+    },
+    "using-statement": {
+      "name": "meta.import.blueprint",
+      "match": "\\b(using)\\s+([\\w\\.]+)\\s+([\\d\\.]+)(;|$)",
+      "captures": {
+        "1": { "name": "keyword.control.import.blueprint" },
+        "2": { "name": "entity.name.class.blueprint" },
+        "3": { "name": "constant.numeric.blueprint" },
+        "4": { "name": "punctuation.terminator.expression.blueprint" }
+      }
+    }
+  }
+}
